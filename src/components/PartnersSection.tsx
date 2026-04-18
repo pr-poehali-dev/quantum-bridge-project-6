@@ -2,117 +2,114 @@ import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import Icon from '@/components/ui/icon';
 
-interface Partner {
-  name: string;
-  desc: string;
-  tags: string[];
-  services: string[];
+interface Product {
+  title: string;
+  items: string[];
+  icon: string;
   category: string;
   subcategory: string;
 }
 
-const partners: Partner[] = [
+const products: Product[] = [
+  // ФАСАД — Облицовка камнем
   {
-    name: 'Компания А',
-    desc: 'Натуральный камень для фасадов',
-    tags: ['натуральный камень', 'фасад'],
-    services: ['Поставка натурального камня', 'Подбор материала под проект', 'Нарезка и обработка камня', 'Консультация по монтажу'],
+    title: 'Натуральный камень для фасадов',
+    items: ['Плиты из натурального камня', 'Подбор породы под проект', 'Нарезка и обработка'],
+    icon: 'Layers',
     category: 'facade',
     subcategory: 'cladding',
   },
   {
-    name: 'Компания И',
-    desc: 'Твёрдые породы натурального камня, дикушка',
-    tags: ['дикушка', 'твёрдый камень', 'природный камень'],
-    services: ['Продажа дикушки и бута', 'Твёрдые породы камня (гранит, кварцит)', 'Обработка и колка камня', 'Оптовые поставки'],
+    title: 'Дикушка, бут и твёрдые породы',
+    items: ['Дикушка и бутовый камень', 'Гранит, кварцит', 'Обработка и колка'],
+    icon: 'Mountain',
     category: 'facade',
     subcategory: 'cladding',
   },
+  // ФАСАД — Декоративные элементы
   {
-    name: 'Компания Д',
-    desc: 'Колонны и балясины из натурального камня',
-    tags: ['колонны', 'балясины', 'камень', 'декор'],
-    services: ['Изготовление колонн из натурального камня', 'Балясины и перила', 'Декоративные элементы фасада', 'Изделия под заказ'],
+    title: 'Колонны и балясины',
+    items: ['Колонны из натурального камня', 'Балясины и перила', 'Декоративные элементы фасада'],
+    icon: 'Columns',
     category: 'facade',
     subcategory: 'decor',
   },
   {
-    name: 'Компания К',
-    desc: 'Стеклофибробетон',
-    tags: ['стеклофибробетон', 'GRC', 'фасад'],
-    services: ['Производство GRC-панелей', 'Декоративные элементы из стеклофибробетона', 'Фасадные панели любой формы', 'Монтаж и установка'],
+    title: 'Стеклофибробетон (GRC)',
+    items: ['Фасадные GRC-панели', 'Декоративные элементы из GRC', 'Панели любой формы и цвета'],
+    icon: 'Square',
     category: 'facade',
     subcategory: 'decor',
   },
+  // ФАСАД — Фасадные системы
   {
-    name: 'Компания М',
-    desc: 'Вентилируемые фасады',
-    tags: ['вентфасад', 'облицовка', 'монтаж'],
-    services: ['Проектирование вентфасадов', 'Поставка систем вентфасадов', 'Монтаж под ключ', 'Гарантийное обслуживание'],
+    title: 'Вентилируемые фасады',
+    items: ['Системы вентфасадов', 'Проектирование и монтаж', 'Гарантийное обслуживание'],
+    icon: 'Wind',
     category: 'facade',
     subcategory: 'systems',
   },
+  // ФАСАД — Окна и двери
   {
-    name: 'Компания Л',
-    desc: 'Окна и двери',
-    tags: ['окна', 'двери', 'алюминий', 'ПВХ'],
-    services: ['Окна ПВХ и алюминиевые', 'Входные и межкомнатные двери', 'Замер и монтаж', 'Остекление фасадов'],
+    title: 'Окна и двери',
+    items: ['Окна ПВХ и алюминиевые', 'Входные и межкомнатные двери', 'Замер и монтаж', 'Остекление фасадов'],
+    icon: 'DoorOpen',
     category: 'facade',
     subcategory: 'windows',
   },
+  // ДВОР — Мощение
   {
-    name: 'Компания Б',
-    desc: 'Тротуарная плитка, брусчатка, бордюры',
-    tags: ['плитка', 'брусчатка', 'бордюр', 'мощение'],
-    services: ['Тротуарная плитка всех форматов', 'Брусчатка натуральная и бетонная', 'Бордюрный камень', 'Укладка и монтаж'],
+    title: 'Тротуарная плитка и брусчатка',
+    items: ['Тротуарная плитка всех форматов', 'Брусчатка натуральная и бетонная', 'Бордюрный камень', 'Укладка и монтаж'],
+    icon: 'Grid3x3',
     category: 'yard',
     subcategory: 'paving',
   },
+  // ДВОР — Ландшафтный декор
   {
-    name: 'Компания В',
-    desc: 'Цветочницы, кашпо, фонтаны',
-    tags: ['цветочницы', 'кашпо', 'фонтаны', 'декор'],
-    services: ['Уличные цветочницы и кашпо', 'Декоративные фонтаны и чаши', 'Малые архитектурные формы', 'Изготовление под заказ'],
+    title: 'Цветочницы, кашпо и фонтаны',
+    items: ['Уличные цветочницы и кашпо', 'Декоративные фонтаны', 'Малые архитектурные формы', 'Изготовление под заказ'],
+    icon: 'Flower2',
     category: 'yard',
     subcategory: 'landscape',
   },
+  // ДВОР — Ковка и мебель
   {
-    name: 'Компания Г',
-    desc: 'Кованые изделия и мебель',
-    tags: ['ковка', 'мебель', 'заборы', 'ворота'],
-    services: ['Кованые заборы и ограждения', 'Ворота и калитки', 'Уличная кованая мебель', 'Декоративные кованые элементы'],
+    title: 'Кованые изделия и мебель',
+    items: ['Кованые заборы и ограждения', 'Ворота и калитки', 'Уличная кованая мебель', 'Декоративные элементы'],
+    icon: 'Hammer',
     category: 'yard',
     subcategory: 'forging',
   },
+  // ИНТЕРЬЕР — Дизайн
   {
-    name: 'Компания Е',
-    desc: 'Дизайн-студия',
-    tags: ['дизайн', 'интерьер', 'проект'],
-    services: ['Дизайн-проект интерьера', 'Визуализация и 3D-рендер', 'Авторский надзор', 'Подбор материалов и мебели'],
+    title: 'Дизайн-проект интерьера',
+    items: ['Полный дизайн-проект', 'Визуализация и 3D-рендер', 'Авторский надзор', 'Подбор материалов и мебели'],
+    icon: 'Palette',
     category: 'interior',
     subcategory: 'design',
   },
+  // СТРОИТЕЛЬСТВО — Архитектура
   {
-    name: 'Компания Ж',
-    desc: 'Архитектурное бюро',
-    tags: ['архитектура', 'проект', 'чертежи'],
-    services: ['Архитектурное проектирование', 'Проекты частных домов', 'Проекты коммерческих зданий', 'Согласование и экспертиза'],
+    title: 'Архитектурное проектирование',
+    items: ['Проекты частных домов', 'Проекты коммерческих зданий', 'Рабочая документация', 'Согласование и экспертиза'],
+    icon: 'PenTool',
     category: 'construction',
     subcategory: 'project',
   },
+  // СТРОИТЕЛЬСТВО — Монтаж
   {
-    name: 'Компания З',
-    desc: 'Прораб с бригадами',
-    tags: ['монтаж', 'бригада', 'прораб', 'строительство'],
-    services: ['Общестроительные работы', 'Фасадные и отделочные работы', 'Монтаж под ключ', 'Контроль качества и сроков'],
+    title: 'Строительные и монтажные работы',
+    items: ['Общестроительные работы', 'Фасадные и отделочные работы', 'Монтаж под ключ', 'Контроль качества и сроков'],
+    icon: 'HardHat',
     category: 'construction',
     subcategory: 'brigade',
   },
+  // СТРОИТЕЛЬСТВО — Материалы
   {
-    name: 'Компания Н',
-    desc: 'Строительные материалы',
-    tags: ['стройматериалы', 'опт', 'доставка'],
-    services: ['Блоки, кирпич, газобетон', 'Цемент, смеси, растворы', 'Утеплители и гидроизоляция', 'Оптовые поставки с доставкой'],
+    title: 'Строительные материалы',
+    items: ['Блоки, кирпич, газобетон', 'Цемент, смеси, растворы', 'Утеплители и гидроизоляция', 'Оптовые поставки'],
+    icon: 'Package',
     category: 'construction',
     subcategory: 'materials',
   },
@@ -160,13 +157,13 @@ const categories = [
   },
 ];
 
-export default function PartnersSection() {
+export default function CatalogSection() {
   const [activeCategory, setActiveCategory] = useState(categories[0].id);
   const [activeSubcategory, setActiveSubcategory] = useState(categories[0].subcategories[0].id);
-  const [selectedPartner, setSelectedPartner] = useState<Partner | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
   const currentCategory = categories.find((c) => c.id === activeCategory)!;
-  const filteredPartners = partners.filter(
+  const filteredProducts = products.filter(
     (p) => p.category === activeCategory && p.subcategory === activeSubcategory
   );
 
@@ -183,14 +180,14 @@ export default function PartnersSection() {
         {/* Header */}
         <div className="mb-16">
           <p className="text-xs font-medium uppercase tracking-[0.3em] text-white/40 mb-4">
-            Каталог партнёров
+            Каталог
           </p>
           <h2 className="text-3xl font-light text-white md:text-4xl">
-            Найдите нужного<br />
-            <span className="font-semibold">специалиста или материал</span>
+            Материалы и услуги<br />
+            <span className="font-semibold">для вашего проекта</span>
           </h2>
           <p className="mt-4 text-white/50 text-base max-w-lg">
-            Проверенные партнёры — от поставщиков материалов до архитекторов и монтажных бригад. Выберите категорию и подкатегорию.
+            Выберите нужное — наш отдел продаж подберёт решение и свяжется с вами.
           </p>
         </div>
 
@@ -216,9 +213,9 @@ export default function PartnersSection() {
         <div className="flex flex-col gap-10 lg:flex-row">
 
           {/* Subcategory sidebar */}
-          <div className="flex flex-row flex-wrap gap-2 lg:flex-col lg:w-60 lg:flex-none lg:gap-1">
+          <div className="flex flex-row flex-wrap gap-2 lg:flex-col lg:w-56 lg:flex-none lg:gap-1">
             {currentCategory.subcategories.map((sub) => {
-              const count = partners.filter(p => p.category === activeCategory && p.subcategory === sub.id).length;
+              const count = products.filter(p => p.category === activeCategory && p.subcategory === sub.id).length;
               return (
                 <button
                   key={sub.id}
@@ -244,42 +241,41 @@ export default function PartnersSection() {
             })}
           </div>
 
-          {/* Partners grid */}
+          {/* Products grid */}
           <div className="flex-1">
-            {filteredPartners.length > 0 ? (
+            {filteredProducts.length > 0 ? (
               <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-                {filteredPartners.map((partner) => (
+                {filteredProducts.map((product) => (
                   <button
-                    key={partner.name}
-                    onClick={() => setSelectedPartner(partner)}
+                    key={product.title}
+                    onClick={() => setSelectedProduct(product)}
                     className="group border border-white/10 p-6 hover:border-white/40 hover:bg-white/5 transition-all duration-200 text-left"
                   >
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="h-10 w-10 border border-white/20 flex items-center justify-center group-hover:border-white/40 transition-colors">
-                        <Icon name="Building" size={18} className="text-white/40 group-hover:text-white/60" />
+                    <div className="flex items-start justify-between mb-5">
+                      <div className="h-10 w-10 border border-white/15 flex items-center justify-center group-hover:border-white/35 transition-colors">
+                        <Icon name={product.icon as 'Layers'} size={18} className="text-white/40 group-hover:text-white/70" />
                       </div>
                       <Icon name="ArrowUpRight" size={16} className="text-white/20 group-hover:text-white/60 transition-colors" />
                     </div>
-                    <h3 className="text-white font-medium mb-2">{partner.name}</h3>
-                    <p className="text-white/50 text-sm leading-relaxed mb-4">{partner.desc}</p>
-                    <div className="flex flex-wrap gap-1.5">
-                      {partner.tags.map((tag) => (
-                        <span key={tag} className="text-xs text-white/30 border border-white/10 px-2 py-0.5">
-                          {tag}
-                        </span>
+                    <h3 className="text-white font-medium text-sm mb-3 leading-snug">{product.title}</h3>
+                    <ul className="space-y-1.5">
+                      {product.items.slice(0, 3).map((item) => (
+                        <li key={item} className="text-white/40 text-xs flex items-center gap-2">
+                          <span className="w-1 h-1 rounded-full bg-white/25 shrink-0" />
+                          {item}
+                        </li>
                       ))}
-                    </div>
-                    <p className="mt-4 text-xs text-white/30 group-hover:text-white/60 transition-colors flex items-center gap-1.5">
-                      <Icon name="List" size={12} />
-                      {partner.services.length} услуги / продукта
-                    </p>
+                      {product.items.length > 3 && (
+                        <li className="text-white/25 text-xs">+{product.items.length - 3} ещё</li>
+                      )}
+                    </ul>
                   </button>
                 ))}
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center py-20 text-center">
                 <Icon name="PackageSearch" size={32} className="text-white/20 mb-4" />
-                <p className="text-white/30 text-sm">В этой подкатегории пока нет партнёров</p>
+                <p className="text-white/30 text-sm">В этом разделе пока ничего нет</p>
               </div>
             )}
           </div>
@@ -287,54 +283,41 @@ export default function PartnersSection() {
       </div>
 
       {/* Modal */}
-      {selectedPartner && (
+      {selectedProduct && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
-          onClick={() => setSelectedPartner(null)}
+          onClick={() => setSelectedProduct(null)}
         >
           <div
-            className="relative w-full max-w-lg bg-neutral-900 border border-white/10 p-8"
+            className="relative w-full max-w-md bg-neutral-900 border border-white/10 p-8"
             onClick={(e) => e.stopPropagation()}
           >
             <button
-              onClick={() => setSelectedPartner(null)}
+              onClick={() => setSelectedProduct(null)}
               className="absolute top-4 right-4 text-white/40 hover:text-white transition-colors"
             >
               <Icon name="X" size={20} />
             </button>
 
-            <div className="flex items-center gap-4 mb-6">
-              <div className="h-12 w-12 border border-white/20 flex items-center justify-center">
-                <Icon name="Building" size={22} className="text-white/50" />
+            <div className="flex items-center gap-4 mb-8">
+              <div className="h-12 w-12 border border-white/20 flex items-center justify-center shrink-0">
+                <Icon name={selectedProduct.icon as 'Layers'} size={22} className="text-white/50" />
               </div>
-              <div>
-                <h3 className="text-white text-xl font-semibold">{selectedPartner.name}</h3>
-                <p className="text-white/50 text-sm">{selectedPartner.desc}</p>
-              </div>
+              <h3 className="text-white text-lg font-semibold leading-snug">{selectedProduct.title}</h3>
             </div>
 
-            <div className="mb-6">
-              <p className="text-xs uppercase tracking-widest text-white/30 mb-4">Услуги и продукция</p>
-              <ul className="space-y-3">
-                {selectedPartner.services.map((service) => (
-                  <li key={service} className="flex items-start gap-3 text-white/70 text-sm">
-                    <Icon name="ChevronRight" size={14} className="text-white/30 mt-0.5 shrink-0" />
-                    {service}
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="flex flex-wrap gap-1.5 mb-8">
-              {selectedPartner.tags.map((tag) => (
-                <span key={tag} className="text-xs text-white/30 border border-white/10 px-2 py-0.5">
-                  {tag}
-                </span>
+            <p className="text-xs uppercase tracking-widest text-white/30 mb-4">Что входит</p>
+            <ul className="space-y-3 mb-8">
+              {selectedProduct.items.map((item) => (
+                <li key={item} className="flex items-start gap-3 text-white/70 text-sm">
+                  <Icon name="ChevronRight" size={14} className="text-white/30 mt-0.5 shrink-0" />
+                  {item}
+                </li>
               ))}
-            </div>
+            </ul>
 
             <button className="w-full bg-white text-black py-3 text-sm font-medium uppercase tracking-widest hover:bg-white/90 transition-colors">
-              Связаться с партнёром
+              Оставить заявку
             </button>
           </div>
         </div>
